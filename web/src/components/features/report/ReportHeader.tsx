@@ -20,11 +20,19 @@ const ReportHeader = ({ tokenData }: ReportHeaderProps) => {
     <div className="flex flex-col gap-y-6 px-content pt-8 pb-6 border-b border-border-primary">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-x-3">
-          <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-            <span className="text-primary text-xl font-bold">
-              {tokenData.tokenInfo.symbol.charAt(0)}
-            </span>
-          </div>
+          {tokenData.tokenInfo.image ? (
+            <img
+              src={tokenData.tokenInfo.image}
+              alt={tokenData.tokenInfo.symbol}
+              className="w-12 h-12 rounded-xl"
+            />
+          ) : (
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+              <span className="text-primary text-xl font-bold">
+                {tokenData.tokenInfo.symbol.charAt(0)}
+              </span>
+            </div>
+          )}
           <div className="flex flex-col min-w-0">
             <h1 className="text-foreground text-2xl font-bold truncate">
               {tokenData.tokenInfo.name}

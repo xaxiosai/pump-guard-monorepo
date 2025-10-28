@@ -7,6 +7,7 @@ import { solana } from "~/services/solana.service";
 import { analyzeToken } from "~/services/risk.service";
 import { cacheService } from "~/services/cache.service";
 import { env } from "~/config/env";
+import { MetadataService } from "~/services/metadata.service";
 
 export const scanToken = async (req: Request, res: Response) => {
   try {
@@ -84,11 +85,16 @@ export const scanToken = async (req: Request, res: Response) => {
     const holders = await Promise.all(holderDataPromises);
     const riskAnalysis = await analyzeToken(tokenAddress, holders);
 
+    // Fetch token image from metadata (IPFS)
+    const metadataService = new MetadataService();
+    const tokenImage = await metadataService.getTokenImage(tokenAddress);
+
     const responseData = {
       tokenAddress,
       tokenInfo: {
         name: tokenData.baseToken.name,
         symbol: tokenData.baseToken.symbol,
+        image: tokenImage,
         pairAddress: tokenData.pairAddress,
         priceUsd: tokenData.priceUsd,
         marketCap: tokenData.marketCap,

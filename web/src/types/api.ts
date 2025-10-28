@@ -7,6 +7,7 @@ export interface ApiResponse<T> {
 export interface TokenInfo {
   name: string;
   symbol: string;
+  image: string | null;
   pairAddress: string;
   priceUsd: string;
   marketCap: number;
