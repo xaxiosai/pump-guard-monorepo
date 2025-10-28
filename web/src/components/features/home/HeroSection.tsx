@@ -2,10 +2,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import Button from "~/components/ui/Button";
+import { useTokensScannedStore } from "~/stores/tokensScannedStore";
+import { formatNumber } from "~/utils/format";
 
 const HeroSection = () => {
   const [tokenAddress, setTokenAddress] = useState("");
   const navigate = useNavigate();
+  const tokensScanned = useTokensScannedStore((state) => state.count);
 
   const handleScan = () => {
     if (tokenAddress.trim()) {
@@ -55,7 +58,7 @@ const HeroSection = () => {
             TOKENS SCANNED
           </h3>
           <p className="text-5xl font-bold text-foreground">
-            -
+            {formatNumber(tokensScanned, 0)}
           </p>
         </div>
       </div>

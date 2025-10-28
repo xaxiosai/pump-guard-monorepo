@@ -42,34 +42,32 @@ interface ApiResponse<T> {
 ## Project Structure
 
 ```
-client/
+web/
 ├── src/
 │   ├── config/
 │   │   └── env.ts              # Environment variables (Vite)
 │   ├── utils/
-│   │   ├── axiosInstance.ts    # Axios instance with interceptors
-│   │   ├── time.ts             # Moment.js helpers
-│   │   └── validators.ts       # Zod schemas for forms
+│   │   └── format.ts           # Number formatting (K/M/B)
 │   ├── services/
-│   │   └── api.ts              # API service functions
-│   ├── hooks/
-│   │   ├── useScanner.ts       # API hooks
-│   │   └── useForm.ts          # Form hooks
-│   ├── store/
-│   │   └── index.ts            # Zustand store (future)
+│   │   ├── scanner.service.ts  # API service functions
+│   │   └── socket.service.ts   # Socket.io client
+│   ├── stores/
+│   │   ├── recentSearchesStore.ts   # Recent searches (Zustand persist)
+│   │   ├── tokensScannedStore.ts    # Tokens scanned counter
+│   │   └── tooltipStore.ts          # Tooltip state management
 │   ├── types/
-│   │   ├── api.ts              # API response types
-│   │   └── index.ts            # Shared types
+│   │   └── api.ts              # API response types
 │   ├── components/
-│   │   ├── common/             # Reusable components
+│   │   ├── ui/                 # Reusable UI components
+│   │   ├── layout/             # Layout components (Navbar, etc.)
 │   │   └── features/           # Feature-specific components
 │   ├── pages/
 │   │   ├── Home.tsx
-│   │   └── Report.tsx          # /report/:ca
+│   │   └── Report.tsx          # /report/:tokenAddress
 │   ├── router/
 │   │   └── index.tsx           # React Router setup
 │   ├── App.tsx
-│   └── main.tsx
+│   └── main.tsx                # Socket initialization
 ├── .env.development
 ├── .env.production
 ├── vite.config.ts
@@ -85,17 +83,17 @@ client/
 - **React 18** + TypeScript
 - **React Router v6** - Routing
 - **Tailwind CSS** - Styling
-- **Zod** - Validation
-- **React Hook Form** - Form handling
-- **moment-timezone** - Time formatting
-- **axios** - HTTP client
-- **Zustand** - State management (future)
+- **Socket.io-client** - Real-time communication
+- **Zustand** - State management (with persist middleware)
+- **timeago.js** - Relative time formatting
 
 ### Not Using
 - ~~Next.js~~ - using Vite
 - ~~Redux~~ - using Zustand
-- ~~fetch API~~ - using axios
-- ~~date-fns~~ - using moment-timezone
+- ~~axios~~ - using native fetch in services
+- ~~moment-timezone~~ - using timeago.js
+- ~~React Hook Form~~ - simple controlled inputs
+- ~~Zod validation~~ - not needed for simple forms
 
 ---
 
@@ -105,7 +103,7 @@ client/
 ```typescript
 // config/env.ts
 const env = {
-  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
+  API_BASE_URL: import.meta.env.VITE_API_BASE_URL || "http://localhost:3001/api",
   NODE_ENV: import.meta.env.MODE,
 } as const;
 
@@ -114,13 +112,88 @@ export { env };
 
 ```env
 # .env.development
-VITE_API_BASE_URL=http://localhost:3000/api
+VITE_API_BASE_URL=http://localhost:3001/api
 
 # .env.production
 VITE_API_BASE_URL=https://api.pumpguard.com/api
 ```
 
-### Axios Instance
+### Socket.io Client
+```typescript
+// services/socket.service.ts
+import { io, Socket } from "socket.io-client";
+import { env } from "~/config/env";
+
+class SocketService {
+  private socket: Socket | null = null;
+
+  connect() {
+    const socketUrl = env.API_BASE_URL.replace("/api", "");
+    this.socket = io(socketUrl, {
+      transports: ["websocket"],
+    });
+  }
+
+  on(event: string, callback: (...args: any[]) => void) {
+    if (this.socket) {
+      this.socket.on(event, callback);
+    }
+  }
+}
+
+export const socketService = new SocketService();
+
+// main.tsx - Initialize on app load
+import { socketService } from './services/socket.service';
+import { useTokensScannedStore } from './stores/tokensScannedStore';
+
+socketService.connect();
+
+socketService.on('tokensScanned', (count: number) => {
+  useTokensScannedStore.getState().setCount(count);
+});
+
+socketService.on('tokenScanned', (data: { tokenAddress: string; tokensScanned: number }) => {
+  useTokensScannedStore.getState().setCount(data.tokensScanned);
+});
+```
+
+### Zustand Stores
+```typescript
+// stores/tokensScannedStore.ts
+import { create } from "zustand";
+
+interface TokensScannedStore {
+  count: number;
+  setCount: (count: number) => void;
+}
+
+export const useTokensScannedStore = create<TokensScannedStore>((set) => ({
+  count: 0,
+  setCount: (count) => set({ count }),
+}));
+
+// stores/recentSearchesStore.ts - with persist
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+export const useRecentSearchesStore = create<RecentSearchesStore>()(
+  persist(
+    (set) => ({
+      searches: [],
+      addSearch: (search) => set((state) => ({
+        searches: [
+          { ...search, timestamp: Date.now() },
+          ...state.searches.filter(s => s.tokenAddress !== search.tokenAddress),
+        ].slice(0, 5),
+      })),
+    }),
+    { name: "recent-searches" }
+  )
+);
+```
+
+### API Service (Native Fetch)
 ```typescript
 // utils/axiosInstance.ts
 import axios from "axios";

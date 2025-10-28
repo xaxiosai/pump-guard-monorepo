@@ -8,6 +8,7 @@ import { analyzeToken } from "~/services/risk.service";
 import { cacheService } from "~/services/cache.service";
 import { env } from "~/config/env";
 import { MetadataService } from "~/services/metadata.service";
+import { socketService } from "~/services/socket.service";
 
 export const scanToken = async (req: Request, res: Response) => {
   try {
@@ -108,6 +109,9 @@ export const scanToken = async (req: Request, res: Response) => {
 
     const cacheTTL = parseInt(env.CACHE_TTL_RISK_SCORE);
     await cacheService.set(cacheKey, responseData, cacheTTL);
+
+    const tokensScanned = await cacheService.incrementTokensScanned();
+    await socketService.emitTokenScanned(tokenAddress, tokensScanned);
 
     return sendSuccess(res, "Token scan completed", responseData);
   } catch (error) {

@@ -1,11 +1,14 @@
 import express from "express";
+import { createServer } from "http";
 import helmet from "helmet";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import { env } from "~/config/env";
 import routes from "~/routes";
+import { socketService } from "~/services/socket.service";
 
 const app = express();
+const httpServer = createServer(app);
 
 const perSecondLimiter = rateLimit({
   windowMs: 1000,
@@ -44,6 +47,8 @@ app.use("/api", perMinuteLimiter);
 
 app.use("/api", routes);
 
-app.listen(env.PORT, () => {
+socketService.initialize(httpServer);
+
+httpServer.listen(env.PORT, () => {
   console.log(`Server running on http://localhost:${env.PORT}`);
 });

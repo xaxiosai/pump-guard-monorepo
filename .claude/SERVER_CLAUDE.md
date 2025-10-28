@@ -43,7 +43,9 @@ server/src/
 │   ├── solana.service.ts    # Solana RPC (just Connection export)
 │   ├── dexscreener.service.ts
 │   ├── cache.service.ts     # Redis cache singleton (ioredis)
-│   └── risk.service.ts      # Risk calculation algorithms
+│   ├── risk.service.ts      # Risk calculation algorithms
+│   ├── metadata.service.ts  # Token metadata from IPFS (Metaplex)
+│   └── socket.service.ts    # Socket.io for real-time events
 ├── routes/
 │   ├── index.ts             # Route aggregator
 │   ├── scanner.routes.ts
@@ -53,7 +55,7 @@ server/src/
 ├── utils/
 │   ├── response.ts          # sendSuccess, sendError
 │   └── validators.ts        # Zod schemas
-└── index.ts                 # Express app
+└── index.ts                 # Express app + Socket.io server
 ```
 
 ---
@@ -61,11 +63,13 @@ server/src/
 ## Tech Stack (Current)
 
 ### Confirmed
-- **Redis** - ioredis for caching
+- **Redis** - ioredis for caching + counters
 - **Express.js** + TypeScript
+- **Socket.io** - Real-time communication
 - **Zod** for validation
 - **moment-timezone** for timestamps
 - **@solana/web3.js** for Solana
+- **@metaplex-foundation/mpl-token-metadata** - Token metadata
 - **axios** for DexScreener API
 - **helmet, cors, express-rate-limit**
 
@@ -179,6 +183,40 @@ if (tokenData.chainId !== "solana" || !ALLOWED_DEX_IDS.includes(tokenData.dexId)
 }
 ```
 
+### Token Metadata (IPFS)
+```typescript
+import { MetadataService } from "~/services/metadata.service";
+
+const metadataService = new MetadataService();
+const tokenImage = await metadataService.getTokenImage(tokenAddress);
+```
+
+### Socket.io Real-time Events
+```typescript
+// Server-side (controller)
+import { socketService } from "~/services/socket.service";
+
+const tokensScanned = await cacheService.incrementTokensScanned();
+await socketService.emitTokenScanned(tokenAddress, tokensScanned);
+
+// Initialize in index.ts
+import { createServer } from "http";
+import { socketService } from "~/services/socket.service";
+
+const httpServer = createServer(app);
+socketService.initialize(httpServer);
+httpServer.listen(port);
+```
+
+### Redis Counter
+```typescript
+// Increment counter
+const count = await cacheService.incrementTokensScanned();
+
+// Get current count
+const count = await cacheService.getTokensScanned();
+```
+
 ---
 
 ## Common Mistakes to Avoid
@@ -225,13 +263,13 @@ REDIS_URL=redis://localhost:6379
 RPC_URL=https://...
 DEXSCREENER_API_URL=https://api.dexscreener.com
 
-CACHE_TTL_RISK_SCORE=60
+CACHE_TTL_RISK_SCORE=15
 CACHE_TTL_WALLETS_CREATION=86400
 ```
 
 - Validated with Zod in `config/env.ts`
 - Auto-loaded via `dotenv/config` in package.json scripts
-- TTL values in seconds (86400 = 24 hours)
+- TTL values in seconds (15 = 15 seconds for risk scores, 86400 = 24 hours for wallet creation)
 
 ---
 

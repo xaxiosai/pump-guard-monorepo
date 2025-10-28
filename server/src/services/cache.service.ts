@@ -50,6 +50,25 @@ class CacheService {
       console.error("Cache clear error:", error);
     }
   }
+
+  async incrementTokensScanned(): Promise<number> {
+    try {
+      return await this.client.incr("tokens:scanned:total");
+    } catch (error) {
+      console.error("Error incrementing tokens scanned:", error);
+      return 0;
+    }
+  }
+
+  async getTokensScanned(): Promise<number> {
+    try {
+      const count = await this.client.get("tokens:scanned:total");
+      return count ? parseInt(count, 10) : 0;
+    } catch (error) {
+      console.error("Error getting tokens scanned:", error);
+      return 0;
+    }
+  }
 }
 
 export const cacheService = new CacheService();

@@ -12,7 +12,7 @@ const envSchema = z.object({
   RATE_LIMIT_WINDOW: z.string().default("15"),
   RATE_LIMIT_MAX_REQUESTS: z.string().default("100"),
 
-  CACHE_TTL_RISK_SCORE: z.string().default("60"),
+  CACHE_TTL_RISK_SCORE: z.string().default("15"),
   CACHE_TTL_WALLETS_CREATION: z.string().default("86400"),
 });
 
