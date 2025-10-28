@@ -69,9 +69,13 @@ const MetricCard = ({ title, metric, displayValue, description }: MetricCardProp
 
         <div className="flex items-end justify-between">
           <div className="text-xl font-bold text-foreground">{displayValue}</div>
-          <span className={`${colorClass} font-bold text-sm uppercase tracking-wide`}>
-            {riskLevel}
-          </span>
+
+          <div className="flex items-end gap-x-1.5">
+            <span className={`${colorClass} font-bold text-sm uppercase tracking-wide`}>
+              {riskLevel}
+            </span>
+            <span className={`${colorClass} text-xs`}>Risk</span>
+          </div>
         </div>
       </div>
     </Tooltip>

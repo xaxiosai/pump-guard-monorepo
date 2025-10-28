@@ -18,10 +18,10 @@ const LastScannedTokens = () => {
 
   if (tokens.length === 0) return null;
 
-  const getRiskColor = (score: number) => {
-    if (score >= 70) return "text-green-500";
-    if (score >= 40) return "text-yellow-500";
-    return "text-red-500";
+  const getRiskLevel = (score: number) => {
+    if (score >= 70) return { level: "Low Risk", color: "text-green-500" };
+    if (score >= 40) return { level: "Medium Risk", color: "text-yellow-500" };
+    return { level: "High Risk", color: "text-red-500" };
   };
 
   return (
@@ -55,9 +55,18 @@ const LastScannedTokens = () => {
               <span className="text-foreground font-semibold">{formatCurrency(token.marketCap)}</span>
             </div>
 
-            <div className="flex items-center justify-between text-sm mb-3">
+            <div className="flex items-center justify-between text-sm mb-2">
               <span className="text-foreground/60">Risk Score</span>
-              <span className={`font-bold ${getRiskColor(token.score || 0)}`}>{(token.score || 0).toFixed(0)}%</span>
+              <span className={`font-bold ${getRiskLevel(token.score || 0).color}`}>
+                {(token.score || 0).toFixed(0)}%
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between text-sm mb-3">
+              <span className="text-foreground/60">Risk Level</span>
+              <span className={`font-semibold ${getRiskLevel(token.score || 0).color}`}>
+                {getRiskLevel(token.score || 0).level}
+              </span>
             </div>
 
             <div className="text-xs text-foreground/40 text-center pt-3 border-t border-border-primary">
