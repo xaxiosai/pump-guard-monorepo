@@ -1,6 +1,6 @@
-# PumpGuard Server
+# Pump Guard Server
 
-PumpGuard is a Solana token risk analysis API that scans Pumpfun and Pumpswap tokens to detect potential risks based on holder wallet analysis.
+Pump Guard is a Solana token risk analysis API that scans Pumpfun and Pumpswap tokens to detect potential risks based on holder wallet analysis.
 
 ## Features
 

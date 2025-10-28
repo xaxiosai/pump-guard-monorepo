@@ -1,20 +1,15 @@
-import { useEffect, useState } from "react";
-import { greet } from "@shared/index";
-import "./App.css";
+import { RouterProvider } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { router } from "~/router";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [msg, setMsg] = useState("...");
-
-  useEffect(() => {
-    fetch("/api/hello")
-      .then((r) => r.json())
-      .then((d) => setMsg(d.message));
-  }, []);
-
   return (
-    <div>
-      <h1>{greet({ id: "2", name: "Client" })}</h1>
-      <p>API says: {msg}</p>
+    <div className="flex flex-col px-6 max-w-[calc(100%-2px)] lg:max-w-4xl w-full mx-auto border-x border-border-primary">
+      <div className="flex flex-col border-x border-border-primary w-full flex-1">
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </div>
     </div>
   );
 }

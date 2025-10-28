@@ -1,8 +1,8 @@
-# PumpGuard
+# Pump Guard
 
 **Open-source security layer for Solana token traders**
 
-PumpGuard is a real-time risk analysis tool that detects manipulation patterns in pump.fun tokens by analyzing blockchain data, wallet behavior, and liquidity flows.
+Pump Guard is a real-time risk analysis tool that detects manipulation patterns in pump.fun tokens by analyzing blockchain data, wallet behavior, and liquidity flows.
 
 ---
 
@@ -26,7 +26,7 @@ Traders on pump.fun face two critical threats:
 
 ## The Solution
 
-PumpGuard analyzes tokens using real-time blockchain data:
+Pump Guard analyzes tokens using real-time blockchain data:
 
 ### Risk Metrics
 - **Fresh Wallet Concentration** - Wallets created < 7 days ago
@@ -123,7 +123,7 @@ See [.claude/CLAUDE.md](.claude/CLAUDE.md) for detailed guidelines.
 
 ## Learn More
 
-- [Documentation](https://docs.pumpguard.xaxios.com/)
+- [Documentation](https://docs.pump-guard.com/)
 
 ---
 

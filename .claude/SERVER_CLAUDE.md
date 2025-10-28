@@ -1,4 +1,4 @@
-# PumpGuard Server - Claude AI Guidelines
+# Pump Guard Server - Claude AI Guidelines
 
 ## Critical Rules (MUST Follow)
 
