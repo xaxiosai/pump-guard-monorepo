@@ -7,8 +7,9 @@ class SocketService {
   connect() {
     if (this.socket?.connected) return;
 
-    const socketUrl = env.API_BASE_URL.replace("/api", "");
-    this.socket = io(socketUrl, {
+    const base = env.API_BASE_URL.replace(/\/api\/?$/, "");
+
+    this.socket = io(base, {
       transports: ["websocket"],
     });
 
@@ -22,22 +23,16 @@ class SocketService {
   }
 
   disconnect() {
-    if (this.socket) {
-      this.socket.disconnect();
-      this.socket = null;
-    }
+    this.socket?.disconnect();
+    this.socket = null;
   }
 
   on(event: string, callback: (...args: any[]) => void) {
-    if (this.socket) {
-      this.socket.on(event, callback);
-    }
+    this.socket?.on(event, callback);
   }
 
   off(event: string, callback?: (...args: any[]) => void) {
-    if (this.socket) {
-      this.socket.off(event, callback);
-    }
+    this.socket?.off(event, callback);
   }
 }
 
