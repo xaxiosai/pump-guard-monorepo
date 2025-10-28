@@ -19,15 +19,38 @@ class SocketService {
       const tokensScanned = await cacheService.getTokensScanned();
       socket.emit("tokensScanned", tokensScanned);
 
+      const lastScannedTokens = await cacheService.getLastScannedTokens();
+      socket.emit("lastScannedTokens", lastScannedTokens);
+
       socket.on("disconnect", () => {
         console.log(`Client disconnected: ${socket.id}`);
       });
     });
   }
 
-  async emitTokenScanned(tokenAddress: string, tokensScanned: number) {
+  async emitTokenScanned(
+    tokenAddress: string,
+    tokensScanned: number,
+    tokenInfo: {
+      name: string;
+      symbol: string;
+      image: string | null;
+      marketCap: number;
+      score: number;
+      timestamp: number;
+    }
+  ) {
     if (this.io) {
-      this.io.emit("tokenScanned", { tokenAddress, tokensScanned });
+      this.io.emit("tokenScanned", {
+        tokenAddress,
+        tokensScanned,
+        name: tokenInfo.name,
+        symbol: tokenInfo.symbol,
+        image: tokenInfo.image,
+        marketCap: tokenInfo.marketCap,
+        score: tokenInfo.score,
+        timestamp: tokenInfo.timestamp,
+      });
     }
   }
 

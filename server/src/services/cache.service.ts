@@ -69,6 +69,45 @@ class CacheService {
       return 0;
     }
   }
+
+  async addLastScannedToken(tokenData: {
+    tokenAddress: string;
+    name: string;
+    symbol: string;
+    image: string | null;
+    marketCap: number;
+    score: number;
+    timestamp: number;
+  }): Promise<void> {
+    try {
+      const key = "tokens:last-scanned";
+      await this.client.lpush(key, JSON.stringify(tokenData));
+      await this.client.ltrim(key, 0, 2);
+    } catch (error) {
+      console.error("Error adding last scanned token:", error);
+    }
+  }
+
+  async getLastScannedTokens(): Promise<
+    Array<{
+      tokenAddress: string;
+      name: string;
+      symbol: string;
+      image: string | null;
+      marketCap: number;
+      score: number;
+      timestamp: number;
+    }>
+  > {
+    try {
+      const key = "tokens:last-scanned";
+      const tokens = await this.client.lrange(key, 0, 2);
+      return tokens.map((token) => JSON.parse(token));
+    } catch (error) {
+      console.error("Error getting last scanned tokens:", error);
+      return [];
+    }
+  }
 }
 
 export const cacheService = new CacheService();

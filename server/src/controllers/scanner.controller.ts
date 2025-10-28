@@ -111,7 +111,19 @@ export const scanToken = async (req: Request, res: Response) => {
     await cacheService.set(cacheKey, responseData, cacheTTL);
 
     const tokensScanned = await cacheService.incrementTokensScanned();
-    await socketService.emitTokenScanned(tokenAddress, tokensScanned);
+
+    const scannedTokenData = {
+      tokenAddress,
+      name: tokenData.baseToken.name,
+      symbol: tokenData.baseToken.symbol,
+      image: tokenImage,
+      marketCap: tokenData.marketCap,
+      score: riskAnalysis.overallScore,
+      timestamp: moment.utc().unix(),
+    };
+
+    await cacheService.addLastScannedToken(scannedTokenData);
+    await socketService.emitTokenScanned(tokenAddress, tokensScanned, scannedTokenData);
 
     return sendSuccess(res, "Token scan completed", responseData);
   } catch (error) {
