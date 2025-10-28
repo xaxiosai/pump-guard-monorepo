@@ -238,17 +238,26 @@ const count = await cacheService.getTokensScanned();
 
 ---
 
-## Risk Calculation (Future)
+## Risk Calculation
 
 ### Service Location
 - All risk algorithms go in `services/risk.service.ts`
 - Controller just calls the service
 - Keep business logic separate from request handling
 
-### Metrics (Planned)
-1. **Total Native Balance** - Top 50 holders SOL sum
-2. **Fresh Wallets Concentration** - Wallets < 7 days old
-3. **Zero-SOL Holders** - Count of holders with 0 SOL
+### Metrics
+1. **Total Native Balance** (50% weight) - Top 50 holders SOL sum
+2. **Fresh Wallets Concentration** (30% weight) - Wallets < 7 days old
+3. **Zero-SOL Holders** (20% weight) - Count of holders with < 0.01 SOL
+
+### Weight Configuration
+```typescript
+const weights = {
+  totalNativeBalance: 2.22,      // 50% impact
+  freshWalletsConcentration: 1.33, // 30% impact
+  zeroSolHolders: 0.89,           // 20% impact
+};
+```
 
 ---
 

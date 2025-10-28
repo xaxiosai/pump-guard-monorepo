@@ -142,30 +142,20 @@ export function calculateOverallRisk(metrics: RiskMetrics): {
   overallScore: number;
   riskLevel: "low" | "medium" | "high";
 } {
-  const weights = {
-    totalNativeBalance: 1,
-    freshWalletsConcentration: 2,
-    zeroSolHolders: 1.5,
-  };
+  // Weight percentages: Total Native Balance (50%), Fresh Wallets (30%), Zero SOL Holders (20%)
+  const overallScore =
+    metrics.totalNativeBalance.score * 0.5 +
+    metrics.freshWalletsConcentration.score * 0.3 +
+    metrics.zeroSolHolders.score * 0.2;
 
-  const weightedSum =
-    metrics.totalNativeBalance.score * weights.totalNativeBalance +
-    metrics.freshWalletsConcentration.score * weights.freshWalletsConcentration +
-    metrics.zeroSolHolders.score * weights.zeroSolHolders;
-
-  const totalWeights =
-    weights.totalNativeBalance +
-    weights.freshWalletsConcentration +
-    weights.zeroSolHolders;
-
-  const overallScore = Math.round((weightedSum / totalWeights) * 100) / 100;
+  const roundedScore = Math.round(overallScore * 100) / 100;
 
   let riskLevel: "low" | "medium" | "high";
-  if (overallScore >= 70) riskLevel = "low";
-  else if (overallScore >= 40) riskLevel = "medium";
+  if (roundedScore >= 70) riskLevel = "low";
+  else if (roundedScore >= 40) riskLevel = "medium";
   else riskLevel = "high";
 
-  return { overallScore, riskLevel };
+  return { overallScore: roundedScore, riskLevel };
 }
 
 export async function analyzeToken(

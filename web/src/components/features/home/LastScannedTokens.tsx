@@ -42,11 +42,11 @@ const LastScannedTokens = () => {
                   <span className="text-primary text-2xl font-bold">{token.symbol.charAt(0)}</span>
                 </div>
               )}
-              <div className="flex flex-col flex-1">
+              <div className="flex flex-col flex-1 min-w-0">
                 <span className="text-foreground font-semibold text-lg truncate">
                   {token.name}
                 </span>
-                <span className="text-foreground/60 text-sm">${token.symbol}</span>
+                <span className="text-foreground/60 text-sm truncate">${token.symbol}</span>
               </div>
             </div>
 
