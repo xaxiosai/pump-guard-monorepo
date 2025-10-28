@@ -1,0 +1,71 @@
+---
+title: "Algorithm"
+description: "Transparent, metric-based risk scoring"
+---
+
+Pump Guard analyzes token holder patterns and calculates a simple 0-100 risk score. Higher scores mean lower risk.
+
+## How It Works
+
+We look at the top 50 token holders and check three key signals:
+
+### 1. Total Native Balance (50% of score)
+
+**What we check**: How much SOL do the top holders have in total?
+
+**Why it matters**: Real traders keep SOL in their wallets for fees and trading. Scam bots usually drain all their SOL after buying tokens.
+
+- **Good sign**: 1,000+ SOL total
+- **Warning sign**: 500-1,000 SOL
+- **Red flag**: Less than 500 SOL
+
+---
+
+### 2. Fresh Wallets (30% of score)
+
+**What we check**: How many of the top holders are brand new wallets (less than 7 days old)?
+
+**Why it matters**: Scammers create fresh wallets to hide their tracks. Too many new wallets means coordinated manipulation.
+
+- **Good sign**: 15 or fewer fresh wallets
+- **Warning sign**: 16-25 fresh wallets
+- **Red flag**: 26+ fresh wallets
+
+---
+
+### 3. Zero-SOL Holders (20% of score)
+
+**What we check**: How many top holders have absolutely no SOL left?
+
+**Why it matters**: You need SOL to pay transaction fees. Wallets with zero SOL are usually bots that extracted everything.
+
+- **Good sign**: 5 or fewer zero-SOL wallets
+- **Warning sign**: 6-15 zero-SOL wallets
+- **Red flag**: 16+ zero-SOL wallets
+
+---
+
+## Final Score
+
+We combine all three metrics with their weights:
+
+- **Low Risk** (70-100%): Looks healthy
+- **Medium Risk** (40-69%): Be cautious
+- **High Risk** (0-39%): Major red flags
+
+## Live Analysis
+
+Every token you scan on [pumpguard.xaxios.com](https://pumpguard.xaxios.com) gets analyzed in real-time. You'll see:
+
+- Overall risk score and level
+- Individual scores for each metric
+- Clear color coding (green/yellow/red)
+- When the token was last scanned
+
+## Open Source
+
+All our scoring code is public on [GitHub](https://github.com/xaxios/pump-guard-monorepo). You can verify exactly how we calculate risk.
+
+---
+
+> **Disclaimer**: Pump Guard shows risk patterns, not price predictions. Always do your own research before trading.

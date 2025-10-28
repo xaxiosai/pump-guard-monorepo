@@ -1,0 +1,78 @@
+---
+title: "Market Size & Target Users"
+description: "Pump Guard serves traders, builders, and platforms in the fastest-growing Solana ecosystem"
+---
+
+**pump.fun** is the largest token launch platform on Solana, processing billions in daily volume and thousands of new tokens every day.
+
+This explosive growth creates massive demand for **transparent risk signals**.
+
+## The Numbers
+
+**Token Launches**
+- 10,000+ new tokens launched daily during peak periods
+- Most tokens die within hours — only ~1% migrate successfully
+- ~100 tokens graduate to DEX pools daily
+
+**Trading Volume**
+- Regularly exceeds $90M daily
+- Peak days hit nearly $1B in volume
+- pump.fun holds ~95% market share of Solana token launches
+
+**User Activity**
+- Daily active users in the tens of thousands
+- Growing multi-fold during bull cycles
+- Massive retail participation with limited risk tools
+
+## The Opportunity
+
+With thousands of launches daily and billions in volume, traders need **fast, unbiased risk analysis** they can trust.
+
+Right now, most traders rely on:
+- Random Telegram/Discord tips (easily manipulated)
+- Chart patterns (fake pumps look real)
+- Social media hype (bought by scammers)
+
+**Pump Guard changes this** by providing blockchain-verified risk data in seconds.
+
+## Who Uses Pump Guard
+
+**Traders & Investors**
+Looking for early Solana gems without getting rugged. Need clear risk metrics before buying.
+
+**Influencers & KOLs**
+Want to promote legitimate projects without damaging their reputation. Use Pump Guard to vet tokens before sharing.
+
+**Token Builders**
+Honest projects proving they're not scams. Show transparent holder data to build trust.
+
+**Platforms & DEXs**
+Integrate risk scores to protect users and reduce scam listings. Improve platform reputation.
+
+## How It Works
+
+**Free for Everyone**
+- Unlimited token scans
+- Full risk reports
+- Community scan activity
+- Open source code verification
+
+**Future Premium Features** (Potential)
+- Real-time alerts for new scans
+- API access for platforms
+- Historical data and trend analysis
+- Custom webhooks for integrations
+
+## Ecosystem Impact
+
+By making risk data free and transparent, Pump Guard:
+- Reduces scam noise across Solana
+- Helps legitimate projects stand out
+- Builds trust in the pump.fun ecosystem
+- Increases trader retention and confidence
+
+---
+
+**The market is here. The volume is massive. The need for transparency is critical.**
+
+Pump Guard fills that gap.

@@ -1,0 +1,64 @@
+---
+title: "Solution"
+description: "Pump Guard — An Open-Source Safety Layer for Traders"
+---
+
+Pump Guard gives you **instant transparency** into any pump.fun token by analyzing blockchain data that scammers can't fake.
+
+## What We Analyze
+
+When you scan a token on [pumpguard.xaxios.com](https://pumpguard.xaxios.com), we check:
+
+- **Top 50 holders**: Who owns the token?
+- **Wallet ages**: Are they fresh wallets or established traders?
+- **SOL balances**: Do holders have funds for trading, or zero balance (bot wallets)?
+- **Distribution patterns**: Is ownership organic or clustered?
+
+Every metric gets scored 0-100, then combined into one overall risk score.
+
+## Our Principles
+
+**Open Source First**
+All our code is public. You can verify exactly how we calculate risk.
+
+**No Price Predictions**
+We show manipulation patterns, not investment advice.
+
+**Real-Time Analysis**
+Scores calculated fresh when you scan, using live blockchain data.
+
+**Built for Builders**
+Honest projects can prove legitimacy with transparent metrics.
+
+## Who Benefits
+
+**Traders**
+See red flags before you buy. Avoid rug pulls and farming scams.
+
+**Communities**
+Prove your token is legitimate with on-chain data, not just promises.
+
+**Builders**
+Stand out from scams by showing healthy holder patterns.
+
+**Platforms**
+Reduce scam noise and keep users safe.
+
+## Real Impact
+
+**Without Pump Guard:**
+Scam bots pump tokens to millions in market cap, generate hype, then crash to zero overnight.
+
+**With Pump Guard:**
+You see the warning signs early — fresh wallets, zero-SOL holders, suspicious patterns — and can make informed decisions.
+
+## The Result
+
+Instead of getting rugged, traders can:
+- Spot manipulation before it's too late
+- Support legitimate projects with confidence
+- Help build a safer Solana ecosystem
+
+---
+
+> Pump Guard reveals what's behind the chart, so you can trade smarter.
