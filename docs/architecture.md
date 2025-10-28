@@ -70,7 +70,7 @@ Pump Guard is built as a lightweight, modular system that analyzes tokens in rea
 
 ## Open Source
 
-The entire codebase is open source on [GitHub](https://github.com/xaxios/pump-guard-monorepo):
+The entire codebase is open source on [GitHub](https://github.com/xaxiosai/pump-guard-monorepo):
 
 - Full backend and frontend code
 - Deployment configurations
