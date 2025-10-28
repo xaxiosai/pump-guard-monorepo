@@ -123,7 +123,7 @@ See [.claude/CLAUDE.md](.claude/CLAUDE.md) for detailed guidelines.
 
 ## Learn More
 
-- [Documentation](https://docs.pump-guard.com/)
+- [Documentation](https://docs.pumpguard.xaxios.com/)
 
 ---
 
