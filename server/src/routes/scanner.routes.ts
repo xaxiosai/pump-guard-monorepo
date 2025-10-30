@@ -8,8 +8,8 @@ const router = Router();
 
 const perSecondLimiter = rateLimit({
     windowMs: 1000,
-    max: 1,
-    message: { success: false, message: "Too many requests, max 1 per second", data: null },
+    max: 2,
+    message: { success: false, message: "Too many requests, max 2 per second", data: null },
     standardHeaders: true,
     legacyHeaders: false,
     skipFailedRequests: true,
@@ -17,8 +17,8 @@ const perSecondLimiter = rateLimit({
 
 const per15SecondsLimiter = rateLimit({
     windowMs: 15000,
-    max: 5,
-    message: { success: false, message: "Too many requests, max 5 per 15 seconds", data: null },
+    max: 10,
+    message: { success: false, message: "Too many requests, max 10 per 15 seconds", data: null },
     standardHeaders: true,
     legacyHeaders: false,
     skipFailedRequests: true,
@@ -26,8 +26,8 @@ const per15SecondsLimiter = rateLimit({
 
 const perMinuteLimiter = rateLimit({
     windowMs: 60000,
-    max: 10,
-    message: { success: false, message: "Too many requests, max 10 per minute", data: null },
+    max: 20,
+    message: { success: false, message: "Too many requests, max 20 per minute", data: null },
     standardHeaders: true,
     legacyHeaders: false,
     skipFailedRequests: true,

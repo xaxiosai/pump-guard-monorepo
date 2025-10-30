@@ -8,12 +8,13 @@ import routes from "~/routes";
 import { socketService } from "~/services/socket.service";
 
 const app = express();
+app.set("trust proxy", true);
 const httpServer = createServer(app);
 
 const perSecondLimiter = rateLimit({
   windowMs: 1000,
-  max: 10,
-  message: { success: false, message: "Too many requests, max 10 per second", data: null },
+  max: 20,
+  message: { success: false, message: "Too many requests, max 20 per second", data: null },
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,
@@ -21,8 +22,8 @@ const perSecondLimiter = rateLimit({
 
 const per15SecondsLimiter = rateLimit({
   windowMs: 15000,
-  max: 25,
-  message: { success: false, message: "Too many requests, max 25 per 15 seconds", data: null },
+  max: 50,
+  message: { success: false, message: "Too many requests, max 50 per 15 seconds", data: null },
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,
@@ -30,8 +31,8 @@ const per15SecondsLimiter = rateLimit({
 
 const perMinuteLimiter = rateLimit({
   windowMs: 60000,
-  max: 50,
-  message: { success: false, message: "Too many requests, max 50 per minute", data: null },
+  max: 100,
+  message: { success: false, message: "Too many requests, max 100 per minute", data: null },
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,
