@@ -11,11 +11,19 @@ interface TokenMetadata {
 }
 
 export class MetadataService {
+  private static instance: MetadataService;
   private umi;
 
-  constructor() {
-    const rpcUrl = process.env.SOLANA_RPC_URL || "https://api.mainnet-beta.solana.com";
+  private constructor() {
+    const rpcUrl = process.env.RPC_URL || "https://api.mainnet-beta.solana.com";
     this.umi = createUmi(rpcUrl);
+  }
+
+  public static getInstance(): MetadataService {
+    if (!MetadataService.instance) {
+      MetadataService.instance = new MetadataService();
+    }
+    return MetadataService.instance;
   }
 
   async getTokenMetadata(tokenAddress: string): Promise<TokenMetadata | null> {
