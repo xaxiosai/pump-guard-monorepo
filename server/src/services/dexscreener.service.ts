@@ -1,8 +1,8 @@
 import axios from "axios";
 import { env } from "~/config/env";
 
-type ChainId = "solana" | "base" | "ethereum";
-type DexId = "pumpfun" | "pumpswap" | "raydium" | "uniswap";
+type ChainId = "solana";
+type DexId = "pumpfun" | "pumpswap";
 
 const ALLOWED_DEX_IDS: DexId[] = ["pumpfun", "pumpswap"];
 
