@@ -32,24 +32,20 @@ export const scanToken = async (req: Request, res: Response) => {
     }
 
     const tokenMint = new PublicKey(tokenAddress);
+
     const TOKEN_PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 
-    const metadataService = MetadataService.getInstance();
-
-    const [tokenAccounts, tokenImage] = await Promise.all([
-      solana.getProgramAccounts(TOKEN_PROGRAM_ID, {
-        filters: [
-          { dataSize: 165 },
-          {
-            memcmp: {
-              offset: 0,
-              bytes: tokenMint.toBase58(),
-            },
+    const tokenAccounts = await solana.getProgramAccounts(TOKEN_PROGRAM_ID, {
+      filters: [
+        { dataSize: 165 },
+        {
+          memcmp: {
+            offset: 0,
+            bytes: tokenMint.toBase58(),
           },
-        ],
-      }),
-      metadataService.getTokenImage(tokenAddress),
-    ]);
+        },
+      ],
+    });
 
     const accountsWithBalances = tokenAccounts
       .map((account) => {
@@ -89,6 +85,10 @@ export const scanToken = async (req: Request, res: Response) => {
 
     const holders = await Promise.all(holderDataPromises);
     const riskAnalysis = await analyzeToken(tokenAddress, holders);
+
+    // Fetch token image from metadata (IPFS)
+    const metadataService = new MetadataService();
+    const tokenImage = await metadataService.getTokenImage(tokenAddress);
 
     const responseData = {
       tokenAddress,
