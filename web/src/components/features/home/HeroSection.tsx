@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import Button from "~/components/ui/Button";
 import { useTokensScannedStore } from "~/stores/tokensScannedStore";
-import { formatNumber } from "~/utils/format";
+import { formatNumberWithCommas } from "~/utils/format";
 
 const HeroSection = () => {
   const [tokenAddress, setTokenAddress] = useState("");
@@ -58,7 +58,7 @@ const HeroSection = () => {
             TOKENS SCANNED
           </h3>
           <p className="text-5xl font-bold text-foreground">
-            {formatNumber(tokensScanned, 0)}
+            {formatNumberWithCommas(tokensScanned)}
           </p>
         </div>
       </div>

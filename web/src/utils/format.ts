@@ -20,3 +20,11 @@ export const formatCurrency = (num: number | undefined, decimals: number = 2): s
 export const formatPercentage = (num: number, decimals: number = 0): string => {
   return `${num.toFixed(decimals)}%`;
 };
+
+export const formatNumberWithCommas = (num: number | undefined): string => {
+  if (num === undefined || num === null) return "N/A";
+  return num.toLocaleString('en-US', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  });
+};
