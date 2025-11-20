@@ -9,6 +9,7 @@ import { cacheService } from "~/services/cache.service";
 import { env } from "~/config/env";
 import { MetadataService } from "~/services/metadata.service";
 import { socketService } from "~/services/socket.service";
+import { detectProgramId } from "~/utils/programId";
 
 export const scanToken = async (req: Request, res: Response) => {
   try {
@@ -21,7 +22,12 @@ export const scanToken = async (req: Request, res: Response) => {
       return sendSuccess(res, "Token scan completed (cached)", cachedData);
     }
 
-    const tokenData = await dexscreenerService.getTokenData("solana", tokenAddress);
+    const tokenMint = new PublicKey(tokenAddress);
+
+    const [tokenData, TOKEN_PROGRAM_ID] = await Promise.all([
+      dexscreenerService.getTokenData("solana", tokenAddress),
+      detectProgramId(solana, tokenMint),
+    ]);
 
     if (!tokenData) {
       return sendError(res, "Token not found", 404);
@@ -30,9 +36,6 @@ export const scanToken = async (req: Request, res: Response) => {
     if (tokenData.chainId !== "solana" || !ALLOWED_DEX_IDS.includes(tokenData.dexId)) {
       return sendError(res, "Only Pumpfun and Pumpswap tokens on Solana are supported", 400);
     }
-
-    const tokenMint = new PublicKey(tokenAddress);
-    const TOKEN_PROGRAM_ID = new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
 
     const metadataService = MetadataService.getInstance();
 
@@ -48,7 +51,7 @@ export const scanToken = async (req: Request, res: Response) => {
           },
         ],
       }),
-      metadataService.getTokenImage(tokenAddress),
+      metadataService.getTokenImage(tokenAddress, TOKEN_PROGRAM_ID),
     ]);
 
     const accountsWithBalances = tokenAccounts

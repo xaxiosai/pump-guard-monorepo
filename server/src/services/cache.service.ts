@@ -80,9 +80,17 @@ class CacheService {
     timestamp: number;
   }): Promise<void> {
     try {
-      const key = "tokens:last-scanned";
-      await this.client.lpush(key, JSON.stringify(tokenData));
-      await this.client.ltrim(key, 0, 2);
+      const tokenKey = "tokens:last-scanned:24h";
+      const dataKey = `tokens:last-scanned:data:${tokenData.tokenAddress}`;
+
+      await this.client.zadd(tokenKey, tokenData.timestamp, tokenData.tokenAddress);
+
+      await this.client.setex(dataKey, 86400, JSON.stringify(tokenData));
+
+      const oneDayAgo = Math.floor(Date.now() / 1000) - 86400;
+      await this.client.zremrangebyscore(tokenKey, 0, oneDayAgo);
+
+      await this.client.expire(tokenKey, 86400);
     } catch (error) {
       console.error("Error adding last scanned token:", error);
     }
@@ -100,9 +108,32 @@ class CacheService {
     }>
   > {
     try {
-      const key = "tokens:last-scanned";
-      const tokens = await this.client.lrange(key, 0, 2);
-      return tokens.map((token) => JSON.parse(token));
+      const tokenKey = "tokens:last-scanned:24h";
+
+      const oneDayAgo = Math.floor(Date.now() / 1000) - 86400;
+      await this.client.zremrangebyscore(tokenKey, 0, oneDayAgo);
+
+      const tokenAddresses = await this.client.zrevrange(tokenKey, 0, 49);
+
+      const tokens: Array<{
+        tokenAddress: string;
+        name: string;
+        symbol: string;
+        image: string | null;
+        marketCap: number;
+        score: number;
+        timestamp: number;
+      }> = [];
+
+      for (const address of tokenAddresses) {
+        const dataKey = `tokens:last-scanned:data:${address}`;
+        const tokenData = await this.client.get(dataKey);
+        if (tokenData) {
+          tokens.push(JSON.parse(tokenData));
+        }
+      }
+
+      return tokens;
     } catch (error) {
       console.error("Error getting last scanned tokens:", error);
       return [];

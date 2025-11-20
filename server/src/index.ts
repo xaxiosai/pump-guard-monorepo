@@ -18,6 +18,7 @@ const perSecondLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,
+  validate: { trustProxy: false },
 });
 
 const per15SecondsLimiter = rateLimit({
@@ -27,6 +28,7 @@ const per15SecondsLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,
+  validate: { trustProxy: false },
 });
 
 const perMinuteLimiter = rateLimit({
@@ -36,6 +38,7 @@ const perMinuteLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipFailedRequests: true,
+  validate: { trustProxy: false },
 });
 
 app.use(helmet());
